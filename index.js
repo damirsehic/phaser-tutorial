@@ -39,47 +39,11 @@ let fps = 0
 function create() {
   this.add.image(400, 300, 'sky')
 
-  platforms = this.physics.add.staticGroup()
-  platforms.create(400, 568, 'ground').setScale(2).refreshBody()
-  platforms.create(600, 400, 'ground')
-  platforms.create(50, 250, 'ground')
-  platforms.create(750, 220, 'ground')
-
-  player = this.physics.add.sprite(100, 450, 'dude')
-  player.setBounce(0.2)
-  player.setCollideWorldBounds(true)
-  player.body.setGravityY(300)
-  this.anims.create({
-    key: 'left',
-    frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
-    frameRate: 10,
-    repeat: -1,
-  })
-  this.anims.create({
-    key: 'turn',
-    frames: [{ key: 'dude', frame: 4 }],
-    frameRate: 20,
-  })
-  this.anims.create({
-    key: 'right',
-    frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
-    frameRate: 10,
-    repeat: -1,
-  })
-  this.physics.add.collider(player, platforms)
-
+  platforms = createPlatforms.call(this)
+  player = createPlayer.call(this, platforms)
   cursors = this.input.keyboard.createCursorKeys()
-
-  stars = this.physics.add.group({
-    key: 'star',
-    repeat: 11,
-    setXY: { x: 12, y: 0, stepX: 70 },
-  })
-  stars.children.iterate(function (child) {
-    child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8))
-  })
-  this.physics.add.collider(stars, platforms)
-  this.physics.add.overlap(player, stars, collectStar, null, this)
+  stars = createStars.call(this)
+  bombs = createBombs.call(this)
 
   scoreText = this.add.text(16, 16, 'score: 0', {
     fontSize: '16px',
@@ -90,10 +54,6 @@ function create() {
     fontSize: '16px',
     fill: '#000',
   })
-
-  bombs = this.physics.add.group()
-  this.physics.add.collider(bombs, platforms)
-  this.physics.add.collider(player, bombs, hitBomb, null, this)
 }
 
 function update() {
@@ -143,4 +103,66 @@ function hitBomb(player, bomb) {
   player.setTint(0xff0000)
   player.anims.play('turn')
   gameOver = true
+}
+
+function createPlatforms() {
+  const platforms = this.physics.add.staticGroup()
+  platforms.create(400, 568, 'ground').setScale(2).refreshBody()
+  platforms.create(600, 400, 'ground')
+  platforms.create(50, 250, 'ground')
+  platforms.create(750, 220, 'ground')
+
+  return platforms
+}
+
+function createPlayer(platforms) {
+  const player = this.physics.add.sprite(100, 450, 'dude')
+  player.setBounce(0.2)
+  player.setCollideWorldBounds(true)
+  player.body.setGravityY(300)
+  this.anims.create({
+    key: 'left',
+    frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+    frameRate: 10,
+    repeat: -1,
+  })
+  this.anims.create({
+    key: 'turn',
+    frames: [{ key: 'dude', frame: 4 }],
+    frameRate: 20,
+  })
+  this.anims.create({
+    key: 'right',
+    frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+    frameRate: 10,
+    repeat: -1,
+  })
+  this.physics.add.collider(player, platforms)
+
+  return player
+}
+
+function createStars() {
+  const stars = this.physics.add.group({
+    key: 'star',
+    repeat: 11,
+    setXY: { x: 12, y: 0, stepX: 70 },
+  })
+
+  stars.children.iterate(function (child) {
+    child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8))
+  })
+
+  this.physics.add.collider(stars, platforms)
+  this.physics.add.overlap(player, stars, collectStar, null, this)
+
+  return stars
+}
+
+function createBombs() {
+  const bombs = this.physics.add.group()
+  this.physics.add.collider(bombs, platforms)
+  this.physics.add.collider(player, bombs, hitBomb, null, this)
+
+  return bombs
 }
