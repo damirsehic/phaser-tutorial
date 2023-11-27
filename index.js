@@ -34,6 +34,7 @@ let cursors
 let score = 0
 let scoreText
 let stars
+let fps = 0
 
 function create() {
   this.add.image(400, 300, 'sky')
@@ -81,7 +82,12 @@ function create() {
   this.physics.add.overlap(player, stars, collectStar, null, this)
 
   scoreText = this.add.text(16, 16, 'score: 0', {
-    fontSize: '32px',
+    fontSize: '16px',
+    fill: '#000',
+  })
+
+  fps = this.add.text(700, 16, 'score: 0', {
+    fontSize: '16px',
     fill: '#000',
   })
 
@@ -105,6 +111,8 @@ function update() {
   if (cursors.up.isDown && player.body.touching.down) {
     player.setVelocityY(-470)
   }
+
+  fps.setText('fps: ' + Math.round(game.loop.actualFps, 1))
 }
 
 function collectStar(player, star) {
