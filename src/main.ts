@@ -1,3 +1,5 @@
+import Phaser from 'phaser'
+
 var config = {
   type: Phaser.AUTO,
   width: 800,
@@ -31,10 +33,12 @@ function preload() {
 
 let platforms
 let cursors
+let player
+let bombs
 let score = 0
 let scoreText
 let stars
-let fps = 0
+let fpsText
 
 function create() {
   this.add.image(400, 300, 'sky')
@@ -50,7 +54,7 @@ function create() {
     fill: '#000',
   })
 
-  fps = this.add.text(700, 16, 'score: 0', {
+  fpsText = this.add.text(700, 16, 'score: 0', {
     fontSize: '16px',
     fill: '#000',
   })
@@ -72,7 +76,7 @@ function update() {
     player.setVelocityY(-470)
   }
 
-  fps.setText('fps: ' + Math.round(game.loop.actualFps, 1))
+  fpsText.setText('fps: ' + Math.round(game.loop.actualFps))
 }
 
 function collectStar(player, star) {
@@ -102,7 +106,6 @@ function hitBomb(player, bomb) {
   this.physics.pause()
   player.setTint(0xff0000)
   player.anims.play('turn')
-  gameOver = true
 }
 
 function createPlatforms() {
