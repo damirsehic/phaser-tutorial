@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import eventStream from '../util/eventStream'
 
 export class Scene01 extends Phaser.Scene {
   private player
@@ -7,8 +8,6 @@ export class Scene01 extends Phaser.Scene {
   private platforms
 
   public cursors
-  public score = 0
-  public scoreText
   public fpsText
 
   constructor() {
@@ -25,11 +24,6 @@ export class Scene01 extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys()
     this.stars = this.createStars.call(this)
     this.bombs = this.createBombs.call(this)
-
-    this.scoreText = this.add.text(16, 16, 'score: 0', {
-      fontSize: '16px',
-      color: '#000',
-    })
 
     this.fpsText = this.add.text(700, 16, 'score: 0', {
       fontSize: '16px',
@@ -59,8 +53,7 @@ export class Scene01 extends Phaser.Scene {
   collectStar(player, star) {
     star.disableBody(true, true)
 
-    this.score += 10
-    this.scoreText.setText('score: ' + this.score)
+    eventStream.emit('increaseScore')
 
     if (this.stars.countActive(true) === 0) {
       this.stars.children.iterate(function (child) {
