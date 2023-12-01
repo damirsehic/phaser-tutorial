@@ -8,7 +8,6 @@ export class Scene01 extends Phaser.Scene {
   private platforms
 
   public cursors
-  public fpsText
 
   constructor() {
     super('Scene01')
@@ -24,11 +23,6 @@ export class Scene01 extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys()
     this.stars = this.createStars.call(this)
     this.bombs = this.createBombs.call(this)
-
-    this.fpsText = this.add.text(700, 16, 'score: 0', {
-      fontSize: '16px',
-      color: '#000',
-    })
   }
 
   update() {
@@ -46,8 +40,6 @@ export class Scene01 extends Phaser.Scene {
     if (this.cursors.up.isDown && this.player.body.touching.down) {
       this.player.setVelocityY(-470)
     }
-
-    this.fpsText.setText('fps: ' + Math.round(this.game.loop.actualFps))
   }
 
   collectStar(player, star) {
