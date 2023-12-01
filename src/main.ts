@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import { Scene01 } from './scenes/Scene01'
+import { LoadingScene } from './scenes/LoadingScene'
 
 var config = {
   type: Phaser.AUTO,
@@ -13,7 +14,7 @@ var config = {
       debug: false,
     },
   },
-  scene: Scene01,
+  scene: [LoadingScene, Scene01],
 }
 
 export default new Phaser.Game(config)

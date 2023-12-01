@@ -11,6 +11,10 @@ export class Scene01 extends Phaser.Scene {
   public scoreText
   public fpsText
 
+  constructor() {
+    super('Scene01')
+  }
+
   preload() {
     this.load.image('sky', './assets/sky.png')
     this.load.image('ground', './assets/platform.png')
