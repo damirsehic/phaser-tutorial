@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
 import eventStream from '../util/eventStream'
 
-export class Scene01 extends Phaser.Scene {
+export class Scene02 extends Phaser.Scene {
   private player
   private bombs
   private stars
@@ -10,27 +10,24 @@ export class Scene01 extends Phaser.Scene {
   public cursors
 
   constructor() {
-    super('Scene01')
+    super('Scene02')
   }
 
   preload() {}
 
   create() {
-    this.input.keyboard.on('keydown-N', () => {
-      this.scene.start('Scene02')
+    this.input.keyboard.on('keydown-P', () => {
+      this.scene.start('Scene01')
     })
 
-    this.add.image(400, 300, 'sky')
+    const sky = this.add.image(400, 300, 'sky')
+    sky.flipY = true
 
     this.platforms = this.createPlatforms.call(this)
     this.player = this.createPlayer.call(this, this.platforms)
     this.cursors = this.input.keyboard.createCursorKeys()
     this.stars = this.createStars.call(this)
     this.bombs = this.createBombs.call(this)
-
-    this.input.keyboard.on('keydown-N', () => {
-      this.scene.start('Scene02')
-    })
   }
 
   update() {

@@ -8,18 +8,31 @@
         margin: 0;
         background: #282c34;
       }
-      canvas {
+      #game > canvas {
         display: block;
         margin: 20px auto;
         border: 8px solid #21252b;
         border-radius: 8px;
         box-shadow: 0px 1px 8px rgba(0, 0, 0, 1);
       }
+      .controls {
+        width: 800px;
+        margin: 16px auto;
+        color: #e5b567;
+      }
     </style>
   </head>
   <body>
     <main>
       <div id="game"></div>
+      <div class="controls">
+        <h1>Controls</h1>
+        <ul>
+          <li>F - toggle FPS counter</li>
+          <li>N - next scene</li>
+          <li>P - previous scene</li>
+        </ul>
+      </div>
     </main>
     <script type="module" src="/src/main.ts"></script>
   </body>
