@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import eventStream from '../util/eventStream'
+import { Player } from '../components/Player'
 
 export class Scene01 extends Phaser.Scene {
   private player
@@ -23,7 +24,12 @@ export class Scene01 extends Phaser.Scene {
     this.add.image(400, 300, 'sky')
 
     this.platforms = this.createPlatforms.call(this)
-    this.player = this.createPlayer.call(this, this.platforms)
+    this.player = new Player({
+      scene: this,
+      platforms: this.platforms,
+      x: 100,
+      y: 450,
+    })
     this.cursors = this.input.keyboard.createCursorKeys()
     this.stars = this.createStars.call(this)
     this.bombs = this.createBombs.call(this)
@@ -34,20 +40,7 @@ export class Scene01 extends Phaser.Scene {
   }
 
   update() {
-    if (this.cursors.left.isDown) {
-      this.player.setVelocityX(-160)
-      this.player.anims.play('left', true)
-    } else if (this.cursors.right.isDown) {
-      this.player.setVelocityX(160)
-      this.player.anims.play('right', true)
-    } else {
-      this.player.setVelocityX(0)
-      this.player.anims.play('turn')
-    }
-
-    if (this.cursors.up.isDown && this.player.body.touching.down) {
-      this.player.setVelocityY(-470)
-    }
+    this.player.handleMovement(this)
   }
 
   collectStar(player, star) {
@@ -60,16 +53,20 @@ export class Scene01 extends Phaser.Scene {
         child.enableBody(true, child.x, 0, true, true)
       })
 
-      const x =
-        player.x < 400
-          ? Phaser.Math.Between(400, 800)
-          : Phaser.Math.Between(0, 400)
-
-      const bomb = this.bombs.create(x, 16, 'bomb')
-      bomb.setBounce(1)
-      bomb.setCollideWorldBounds(true)
-      bomb.setVelocity(Phaser.Math.Between(-200, 200), 20)
+      this.createBomb(player)
     }
+  }
+
+  private createBomb(player) {
+    const x =
+      player.x < 400
+        ? Phaser.Math.Between(400, 800)
+        : Phaser.Math.Between(0, 400)
+
+    const bomb = this.bombs.create(x, 16, 'bomb')
+    bomb.setBounce(1)
+    bomb.setCollideWorldBounds(true)
+    bomb.setVelocity(Phaser.Math.Between(-200, 200), 20)
   }
 
   hitBomb(player, _bomb) {
@@ -86,33 +83,6 @@ export class Scene01 extends Phaser.Scene {
     platforms.create(750, 220, 'ground')
 
     return platforms
-  }
-
-  createPlayer(platforms) {
-    const player = this.physics.add.sprite(100, 450, 'dude')
-    player.setBounce(0.2)
-    player.setCollideWorldBounds(true)
-    player.body.setGravityY(300)
-    this.anims.create({
-      key: 'left',
-      frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
-      frameRate: 10,
-      repeat: -1,
-    })
-    this.anims.create({
-      key: 'turn',
-      frames: [{ key: 'dude', frame: 4 }],
-      frameRate: 20,
-    })
-    this.anims.create({
-      key: 'right',
-      frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
-      frameRate: 10,
-      repeat: -1,
-    })
-    this.physics.add.collider(player, platforms)
-
-    return player
   }
 
   createStars() {
