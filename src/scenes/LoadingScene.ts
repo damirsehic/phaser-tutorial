@@ -27,6 +27,8 @@ export class LoadingScene extends Phaser.Scene {
       frameWidth: 32,
       frameHeight: 48,
     })
+
+    this.load.audio('loop', './assets/audio/loop.wav')
   }
 
   async create() {

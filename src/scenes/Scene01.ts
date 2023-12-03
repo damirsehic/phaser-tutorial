@@ -8,6 +8,7 @@ export class Scene01 extends Phaser.Scene {
   private stars
   private platforms
 
+  private audioLoop
   public cursors
 
   constructor() {
@@ -17,6 +18,21 @@ export class Scene01 extends Phaser.Scene {
   preload() {}
 
   create() {
+    if (!this.audioLoop) {
+      this.audioLoop = this.sound.add('loop', { loop: true })
+      this.audioLoop.volume = 0.2
+    }
+
+    this.input.keyboard.on('keydown-M', () => {
+      if (this.audioLoop.isPlaying) {
+        this.audioLoop.pause()
+      } else if (this.audioLoop.isPaused) {
+        this.audioLoop.resume()
+      } else {
+        this.audioLoop.play()
+      }
+    })
+
     this.input.keyboard.on('keydown-N', () => {
       this.scene.start('Scene02')
     })

@@ -19,4 +19,8 @@ const config = {
   scene: [LoadingScene, Scene01, Scene02, UIScene],
 }
 
-export default new Phaser.Game(config)
+const game = new Phaser.Game(config)
+// @ts-ignore
+window.game = game
+
+export default game
