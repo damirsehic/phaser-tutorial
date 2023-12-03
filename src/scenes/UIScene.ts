@@ -7,7 +7,7 @@ export class UIScene extends Phaser.Scene {
   private fpsCounter
 
   constructor() {
-    super({ key: 'UIScene', active: true })
+    super({ key: 'UIScene' })
   }
 
   create() {

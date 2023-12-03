@@ -33,5 +33,6 @@ export class LoadingScene extends Phaser.Scene {
 
   async create() {
     this.scene.start('Scene01')
+    this.scene.launch('UIScene')
   }
 }
