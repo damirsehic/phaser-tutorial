@@ -13,7 +13,9 @@ export class Scene02 extends Phaser.Scene {
     super('Scene02')
   }
 
-  preload() {}
+  init() {
+    this.cameras.main.fadeIn(300)
+  }
 
   create() {
     this.input.keyboard.on('keydown-P', () => {

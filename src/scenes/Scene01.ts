@@ -15,7 +15,9 @@ export class Scene01 extends Phaser.Scene {
     super('Scene01')
   }
 
-  preload() {}
+  init() {
+    this.cameras.main.fadeIn(300)
+  }
 
   create() {
     if (!this.audioLoop) {
