@@ -30,6 +30,10 @@ export class UIScene extends Phaser.Scene {
       })
     })
 
+    eventStream.on('resetScore', () => {
+      scoreText.setText('Score: 0')
+    })
+
     this.fpsCounter = this.createFpsCounter()
     this.input.keyboard.on('keydown-F', () => {
       this.toggleFPS()

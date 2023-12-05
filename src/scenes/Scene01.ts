@@ -91,6 +91,7 @@ export class Scene01 extends Phaser.Scene {
     this.physics.pause()
     player.setTint(0xff0000)
     player.anims.play('turn')
+    this.scene.launch('GameOverScene')
   }
 
   createPlatforms() {
