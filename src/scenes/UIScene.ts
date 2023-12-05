@@ -16,8 +16,18 @@ export class UIScene extends Phaser.Scene {
       color: '#000',
     })
     eventStream.on('increaseScore', () => {
-      this.score += 10
-      scoreText.setText('Score: ' + this.score)
+      const oldScore = this.score
+      this.score = oldScore + 10
+      this.tweens.addCounter({
+        from: oldScore,
+        to: this.score,
+        duration: 200,
+        ease: 'linear',
+        onUpdate: (tween) => {
+          const value = Math.round(tween.getValue())
+          scoreText.setText('Score: ' + value)
+        },
+      })
     })
 
     this.fpsCounter = this.createFpsCounter()
