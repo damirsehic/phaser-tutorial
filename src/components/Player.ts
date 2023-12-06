@@ -27,6 +27,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       frameRate: 10,
       repeat: -1,
     })
+
     scene.physics.add.collider(this, platforms)
   }
 
@@ -34,12 +35,15 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     if (scene.cursors.left.isDown) {
       this.setVelocityX(-160)
       this.anims.play('left', true)
+      this.angle = 5
     } else if (scene.cursors.right.isDown) {
       this.setVelocityX(160)
       this.anims.play('right', true)
+      this.angle = -5
     } else {
       this.setVelocityX(0)
       this.anims.play('turn')
+      this.angle = 0
     }
 
     if (scene.cursors.up.isDown && this.body.touching.down) {
