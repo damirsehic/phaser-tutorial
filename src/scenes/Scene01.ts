@@ -52,6 +52,9 @@ export class Scene01 extends Phaser.Scene {
     this.stars = this.createStars.call(this)
     this.bombs = this.createBombs.call(this)
 
+    this.cameras.main.setBounds(0, 0, 2500, 300)
+    this.cameras.main.startFollow(this.player)
+
     this.input.keyboard.on('keydown-N', () => {
       this.scene.start('Scene02')
     })
