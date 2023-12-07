@@ -4,12 +4,15 @@ import { Player } from '../components/Player'
 
 export class Scene01 extends Phaser.Scene {
   private player
-  private bombs
+  private player2
+  private activePlayer
+
   private stars
   private platforms
 
   private audioLoop
   public cursors
+  private isPlayerSwitching = false
 
   constructor() {
     super('Scene01')
@@ -47,10 +50,23 @@ export class Scene01 extends Phaser.Scene {
       platforms: this.platforms,
       x: 100,
       y: 450,
+      tint: null,
+      name: 'player1',
     })
+
+    this.player2 = new Player({
+      scene: this,
+      platforms: this.platforms,
+      x: 700,
+      y: 450,
+      tint: 0x00dddd,
+      name: 'player2',
+    })
+
+    this.activePlayer = this.player
+
     this.cursors = this.input.keyboard.createCursorKeys()
     this.stars = this.createStars.call(this)
-    this.bombs = this.createBombs.call(this)
 
     this.cameras.main.setBounds(0, 0, 2500, 300)
     this.cameras.main.startFollow(this.player)
@@ -61,7 +77,45 @@ export class Scene01 extends Phaser.Scene {
   }
 
   update() {
-    this.player.handleMovement(this)
+    if (!this.isPlayerSwitching) {
+      this.activePlayer.handleMovement(this)
+    }
+
+    this.input.keyboard.on('keydown-SPACE', () => {
+      if (this.isPlayerSwitching) {
+        return
+      }
+
+      this.isPlayerSwitching = true
+      this.activePlayer.stopMovement()
+
+      if (this.activePlayer.name === 'player1') {
+        this.activePlayer = this.player2
+      } else {
+        this.activePlayer = this.player
+      }
+
+      this.panCam(this.activePlayer)
+    })
+  }
+
+  panCam(activePlayer) {
+    this.cameras.main.pan(
+      activePlayer.x,
+      activePlayer.y,
+      500,
+      'Sine.easeInOut',
+      true,
+      (cam, progress) => {
+        cam.panEffect.destination.x = activePlayer.x
+        cam.panEffect.destination.y = activePlayer.y
+        if (progress == 1) {
+          this.cameras.main.stopFollow()
+          this.cameras.main.startFollow(activePlayer, false, 1, 1)
+          this.isPlayerSwitching = false
+        }
+      }
+    )
   }
 
   collectStar(player, star) {
@@ -73,28 +127,7 @@ export class Scene01 extends Phaser.Scene {
       this.stars.children.iterate(function (child) {
         child.enableBody(true, child.x, 0, true, true)
       })
-
-      this.createBomb(player)
     }
-  }
-
-  private createBomb(player) {
-    const x =
-      player.x < 400
-        ? Phaser.Math.Between(400, 800)
-        : Phaser.Math.Between(0, 400)
-
-    const bomb = this.bombs.create(x, 16, 'bomb')
-    bomb.setBounce(1)
-    bomb.setCollideWorldBounds(true)
-    bomb.setVelocity(Phaser.Math.Between(-200, 200), 20)
-  }
-
-  hitBomb(player, _bomb) {
-    this.physics.pause()
-    player.setTint(0xff0000)
-    player.anims.play('turn')
-    this.scene.launch('GameOverScene')
   }
 
   createPlatforms() {
@@ -124,13 +157,5 @@ export class Scene01 extends Phaser.Scene {
     this.physics.add.overlap(this.player, stars, this.collectStar, null, this)
 
     return stars
-  }
-
-  createBombs() {
-    const bombs = this.physics.add.group()
-    this.physics.add.collider(bombs, this.platforms)
-    this.physics.add.collider(this.player, bombs, this.hitBomb, null, this)
-
-    return bombs
   }
 }

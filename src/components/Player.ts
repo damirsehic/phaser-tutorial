@@ -1,10 +1,12 @@
 import Phaser from 'phaser'
 export class Player extends Phaser.Physics.Arcade.Sprite {
-  constructor({ scene, platforms, x, y }) {
+  constructor({ scene, platforms, x, y, tint, name }) {
     super(scene, x, y, 'dude')
 
     scene.physics.world.enable(this)
     scene.add.existing(this)
+
+    this.setName(name)
 
     this.setBounce(0.2)
     this.setCollideWorldBounds(true)
@@ -28,6 +30,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       repeat: -1,
     })
 
+    if (tint) {
+      this.setTint(tint)
+    }
+
     scene.physics.add.collider(this, platforms)
   }
 
@@ -49,5 +55,11 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     if (scene.cursors.up.isDown && this.body.touching.down) {
       this.setVelocityY(-470)
     }
+  }
+
+  public stopMovement() {
+    this.setVelocityX(0)
+    this.anims.play('turn')
+    this.angle = 0
   }
 }
