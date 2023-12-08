@@ -11,9 +11,10 @@ export class UIScene extends Phaser.Scene {
   }
 
   create() {
-    const scoreText = this.add.text(16, 16, 'Score: 0', {
+    const scoreText = this.add.text(16, 16, 'SCORE: 0', {
       fontSize: '16px',
       color: '#000',
+      fontFamily: 'GameFont',
     })
     eventStream.on('increaseScore', () => {
       const oldScore = this.score
@@ -25,13 +26,13 @@ export class UIScene extends Phaser.Scene {
         ease: 'linear',
         onUpdate: (tween) => {
           const value = Math.round(tween.getValue())
-          scoreText.setText('Score: ' + value)
+          scoreText.setText('SCORE: ' + value)
         },
       })
     })
 
     eventStream.on('resetScore', () => {
-      scoreText.setText('Score: 0')
+      scoreText.setText('SCORE: 0')
     })
 
     this.fpsCounter = this.createFpsCounter()
@@ -56,6 +57,7 @@ export class UIScene extends Phaser.Scene {
       .text(700, 16, 'FPS: 0', {
         fontSize: '16px',
         color: '#000',
+        fontFamily: 'GameFont',
       })
       .setVisible(false)
   }

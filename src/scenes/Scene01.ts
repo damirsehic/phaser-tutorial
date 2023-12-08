@@ -149,7 +149,6 @@ export class Scene01 extends Phaser.Scene {
 
     stars.children.iterate((child: Phaser.Physics.Arcade.Sprite) => {
       child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8))
-      child.postFX.addShine(0.5, 0.3, 5)
       return true
     })
 

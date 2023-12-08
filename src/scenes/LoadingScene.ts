@@ -15,6 +15,7 @@ export class LoadingScene extends Phaser.Scene {
       {
         fontSize: '16px',
         color: '#fff',
+        fontFamily: 'GameFont',
       }
     )
     loadingText.setOrigin(0.5, 0.5)

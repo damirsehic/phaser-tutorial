@@ -13,11 +13,13 @@ export class GameOverScene extends Phaser.Scene {
     const gameOverText = this.add.text(400, 285, 'Game Over', {
       color: '#fff',
       fontSize: '32px',
+      fontFamily: 'GameFont',
     })
     gameOverText.setOrigin(0.5, 0.5)
     const tryAgainText = this.add.text(400, 315, 'Press SPACE to play again', {
       color: '#fff',
       fontSize: '16px',
+      fontFamily: 'GameFont',
     })
     tryAgainText.setOrigin(0.5, 0.5)
 
